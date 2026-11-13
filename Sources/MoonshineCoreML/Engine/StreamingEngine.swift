@@ -71,6 +71,8 @@ final class StreamingEngine {
         conv2Buffer = try .makeZeroed(shape: Shape.Frontend.conv2BufferShape, dataType: .float32)
     }
 
+    var isUtteranceInProgress: Bool { decoderState != nil }
+
     /// Every memory frame is used: another chunk won't fit, so the utterance has to end.
     var hasReachedMaximumUtteranceLength: Bool {
         featureFrameCount + TinyModel.Frontend.featureFramesPerChunk > TinyModel.Decoder.maximumMemoryFrameCount
