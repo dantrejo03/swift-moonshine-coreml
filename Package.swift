@@ -10,5 +10,6 @@ let package = Package(
     ],
     targets: [
         .target(name: "MoonshineCoreML"),
+        .testTarget(name: "MoonshineCoreMLTests", dependencies: ["MoonshineCoreML"]),
     ]
 )
