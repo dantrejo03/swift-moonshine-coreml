@@ -14,13 +14,10 @@ struct TranscriberTests {
         #expect(error?.description.contains("update interval") == true)
     }
 
-    @Test func missingTokenizerIsAnError() async throws {
-        let emptyDirectory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
-        try FileManager.default.createDirectory(at: emptyDirectory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: emptyDirectory) }
-
-        await #expect(throws: (any Error).self) {
-            try await Moonshine.Transcriber(modelsDirectory: emptyDirectory)
+    @Test func missingModelsSayWhereToGetThem() async throws {
+        let error = await #expect(throws: Moonshine.Error.self) {
+            try await Moonshine.Transcriber(modelsDirectory: URL(filePath: "/nonexistent"))
         }
+        #expect(error?.description.contains("scripts/download_models.sh") == true)
     }
 }

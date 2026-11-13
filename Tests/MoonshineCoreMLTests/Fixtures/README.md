@@ -10,8 +10,9 @@ Reference data for checking the package against real models end to end. About 2 
 
 ## `reference_transcripts.json`
 
-- `models`: the Hugging Face repository and revision the expected tokens were produced with. A different model
-  release can transcribe differently, so this data is only valid for that revision.
+- `models`: the Hugging Face repository and the release the expected tokens are for. A release with other weights can
+  transcribe differently, so this data is only valid for that release. The tokens were produced with v1.0, whose
+  weights v1.1 shares unchanged.
 - `single_token_texts`: the tokenizer's text for each of the 32,768 token ids on its own; `null` where the tokenizer
   must fail (an empty entry).
 - `recordings[]`: `audio_file`, `sample_count` and the SHA-256 of the samples as little-endian float32 (to confirm the

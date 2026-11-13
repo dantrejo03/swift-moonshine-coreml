@@ -2,3 +2,7 @@
 .swiftpm/
 .DS_Store
 internal/
+.venv/
+# Downloaded by scripts/download_models.sh. Anchored: Sources/MoonshineCoreML/Models/ is code.
+/Models/
+/Models.partial/

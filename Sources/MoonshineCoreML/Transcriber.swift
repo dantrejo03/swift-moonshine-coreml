@@ -30,19 +30,29 @@ extension Moonshine {
         private var nextUpdateSampleCount = 0
 
         /// Loads and checks the five compiled models (frontend.mlmodelc … decoder_step.mlmodelc) and tokenizer.bin, all
-        /// from modelsDirectory. In an app that bundles them, that's `Bundle.main.resourceURL`. The first load on a
-        /// device takes seconds while Core ML prepares the models for its chips; later loads are cached.
+        /// from modelsDirectory. In an app that bundles them, that's `Bundle.main.resourceURL`. They aren't part of this
+        /// package: the README's Models section says how to get them. The first load on a device takes seconds while
+        /// Core ML prepares the models for its chips; later loads are cached.
         ///
         /// updateInterval: how much audio arrives between tentative updates.
-        public init(modelsDirectory: URL, updateInterval: Duration = .milliseconds(500)) async throws {
+        ///
+        /// checksModelVersions: each model carries its Hugging Face release as its Core ML version, and loading fails
+        /// unless all five are one release this version of the package works with. Pass false to load other models
+        /// anyway, such as a new export you're trying out. They still have to have the inputs, outputs and state this
+        /// code expects, and a warning is logged on every load while the check is off.
+        public init(
+            modelsDirectory: URL, updateInterval: Duration = .milliseconds(500), checksModelVersions: Bool = true
+        ) async throws {
             let updateIntervalSeconds = Double(updateInterval.components.seconds)
                 + Double(updateInterval.components.attoseconds) / 1e18
             let updateIntervalSampleCount = Int((updateIntervalSeconds * Double(Self.sampleRateHz)).rounded())
             guard updateIntervalSampleCount > 0 else {
                 throw Error("the update interval must be at least one sample long, got \(updateInterval)")
             }
+            try ModelsDirectory.verifyEveryFileIsPresent(in: modelsDirectory)
             let tokenizer = try Tokenizer(contentsOf: modelsDirectory.appending(path: Self.tokenizerFileName))
-            let models = try LoadedModels(compiledModelsDirectory: modelsDirectory)
+            let models = try LoadedModels(
+                compiledModelsDirectory: modelsDirectory, checksModelVersions: checksModelVersions)
             self.engine = try StreamingEngine(models: models, tokenizer: tokenizer)
             self.updateIntervalSampleCount = updateIntervalSampleCount
         }
