@@ -3,6 +3,10 @@ import Foundation
 /// The folder the transcriber loads from: the five compiled models and the tokenizer, side by side, as Xcode puts them
 /// in an app bundle. They aren't part of this package; scripts/download_models.sh downloads them.
 enum ModelsDirectory {
+    /// Where errors send people for the models. A link rather than the script's path, because an app that adds the
+    /// package through Xcode never sees the script. The README's "## Models" heading makes the anchor.
+    static let downloadInstructionsURL = "https://github.com/dantrejo03/swift-moonshine-coreml#models"
+
     /// Fails unless every file is there, naming all the missing ones and saying where they come from, so a wrong folder
     /// or a skipped download doesn't show up as one model's load error.
     static func verifyEveryFileIsPresent(in directory: URL) throws {
@@ -21,9 +25,8 @@ enum ModelsDirectory {
         }
         throw Moonshine.Error(
             "\(directory.path) is missing \(missingFileNames.joined(separator: ", ")). Is it the right folder? The models "
-                + "aren't part of this package: download them with scripts/download_models.sh (see the README's Models "
-                + "section). In an app, add the five .mlpackage files and tokenizer.bin to the target and pass "
-                + "Bundle.main.resourceURL.")
+                + "aren't part of this package; \(downloadInstructionsURL) says how to download them. In an app, add "
+                + "the five .mlpackage files and tokenizer.bin to the target and pass Bundle.main.resourceURL.")
     }
 
     private static func fileExists(named fileName: String, in directory: URL) -> Bool {

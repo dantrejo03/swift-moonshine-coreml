@@ -18,6 +18,6 @@ struct TranscriberTests {
         let error = await #expect(throws: Moonshine.Error.self) {
             try await Moonshine.Transcriber(modelsDirectory: URL(filePath: "/nonexistent"))
         }
-        #expect(error?.description.contains("scripts/download_models.sh") == true)
+        #expect(error?.description.contains(ModelsDirectory.downloadInstructionsURL) == true)
     }
 }

@@ -57,9 +57,8 @@ struct LoadedModels {
             Self.logger.warning("\(warning, privacy: .public)")
         } else if !release.isCompatible {
             throw Moonshine.Error(
-                "\(compiledModelsDirectory.path): \(release.summary) Download a compatible release with "
-                    + "scripts/download_models.sh (see the README's Models section), or pass checksModelVersions: false "
-                    + "to load these anyway.")
+                "\(compiledModelsDirectory.path): \(release.summary) \(ModelsDirectory.downloadInstructionsURL) says "
+                    + "how to download a compatible release, or pass checksModelVersions: false to load these anyway.")
         }
         for (name, model) in modelByName {
             try name.verifyInterface(of: model)

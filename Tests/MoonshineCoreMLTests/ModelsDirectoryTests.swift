@@ -10,7 +10,13 @@ struct ModelsDirectoryTests {
         for fileName in ModelName.allCases.map(\.compiledFileName) + ["tokenizer.bin"] {
             #expect(error?.description.contains(fileName) == true, "doesn't name \(fileName)")
         }
-        #expect(error?.description.contains("scripts/download_models.sh") == true)
+        #expect(error?.description.contains(ModelsDirectory.downloadInstructionsURL) == true)
+    }
+
+    @Test func downloadInstructionsLinkToTheReadmesModelsSection() throws {
+        #expect(ModelsDirectory.downloadInstructionsURL.hasSuffix("#models"))
+        let readme = try String(contentsOf: RepositoryPaths.root.appending(path: "README.md"), encoding: .utf8)
+        #expect(readme.contains("\n## Models\n"))
     }
 
     @Test func uncompiledModelsSayToCompileThem() throws {
