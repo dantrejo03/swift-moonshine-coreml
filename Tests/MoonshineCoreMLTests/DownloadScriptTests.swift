@@ -21,18 +21,7 @@ struct DownloadScriptTests {
     }
 
     @Test func downloadsTheReleaseTheReferenceTranscriptsAreFor() throws {
-        struct ReferenceTranscripts: Decodable {
-            struct Models: Decodable {
-                let huggingfaceRepository: String
-                let revision: String
-            }
-            let models: Models
-        }
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let referenceModels = try decoder.decode(
-            ReferenceTranscripts.self, from: Data(contentsOf: RepositoryPaths.referenceTranscripts)
-        ).models
+        let referenceModels = try ReferenceTranscripts.load().models
 
         #expect(scriptVariable("huggingface_repository") == referenceModels.huggingfaceRepository)
         #expect(scriptVariable("release_tag") == referenceModels.revision)

@@ -7,6 +7,6 @@ enum RepositoryPaths {
     static let downloadScript = root.appending(path: "scripts/download_models.sh")
     /// Where scripts/download_models.sh puts the models.
     static let downloadedModels = root.appending(path: "Models")
-    static let referenceTranscripts = root.appending(
-        path: "Tests/MoonshineCoreMLTests/Fixtures/reference_transcripts.json")
+    static let fixtures = root.appending(path: "Tests/MoonshineCoreMLTests/Fixtures")
+    static let referenceTranscripts = fixtures.appending(path: "reference_transcripts.json")
 }
