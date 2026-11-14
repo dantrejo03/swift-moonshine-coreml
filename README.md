@@ -2,6 +2,13 @@
 
 Work in progress. This README is a placeholder and will be updated once the project contents are imported.
 
+## Requirements
+
+- iOS 18, macOS 15 or watchOS 11, for `MLState`, which holds the decoder's self-attention cache.
+- On the Mac, Apple silicon. The package uses Swift's `Float16`, which doesn't exist on Intel Macs, so building for
+  Intel macOS stops with an error that says so. A universal macOS app has to remove x86_64 from its Architectures.
+  iPhones, every Apple Watch (arm64 and arm64_32) and the iOS Simulator, even on an Intel Mac, aren't affected.
+
 ## Models
 
 The Core ML models and the tokenizer aren't in this repo or in the Swift package. They're released on Hugging Face as

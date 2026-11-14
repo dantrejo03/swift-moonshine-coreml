@@ -24,5 +24,6 @@ float16 models.
 
 ## Attribution
 
-Both recordings are from the test assets of [Moonshine](https://github.com/moonshine-ai/moonshine-v2), released under the
-MIT License. *A Tale of Two Cities* (Charles Dickens, 1859) is in the public domain.
+Both recordings are from the test assets of [Moonshine](https://github.com/moonshine-ai/moonshine-v2), Copyright (c)
+2025 Moonshine AI, released under the MIT License, whose terms are the same as this package's [LICENSE](../../../LICENSE).
+*A Tale of Two Cities* (Charles Dickens, 1859) is in the public domain.
