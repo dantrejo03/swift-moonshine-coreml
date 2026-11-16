@@ -21,7 +21,11 @@ extension Moonshine {
         private let executorQueue = DispatchSerialQueue(label: "Moonshine.Transcriber")
         public nonisolated var unownedExecutor: UnownedSerialExecutor { executorQueue.asUnownedSerialExecutor() }
 
-        private let engine: StreamingEngine
+        /// The release the loaded models carry, such as "v1.1": the same for all five, since loading checks that.
+        /// nil only with `checksModelVersions: false`, when they carry none or several.
+        public nonisolated let modelVersion: String?
+
+        let engine: StreamingEngine
         /// How much audio arrives between tentative updates. Counted in samples, not on a clock, so a replay of a
         /// recording and a live microphone produce the same updates.
         private let updateIntervalSampleCount: Int
@@ -53,6 +57,7 @@ extension Moonshine {
             let tokenizer = try Tokenizer(contentsOf: modelsDirectory.appending(path: Self.tokenizerFileName))
             let models = try LoadedModels(
                 compiledModelsDirectory: modelsDirectory, checksModelVersions: checksModelVersions)
+            self.modelVersion = models.releaseVersion
             self.engine = try StreamingEngine(models: models, tokenizer: tokenizer)
             self.updateIntervalSampleCount = updateIntervalSampleCount
         }

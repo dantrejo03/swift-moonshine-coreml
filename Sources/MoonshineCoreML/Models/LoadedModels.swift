@@ -20,6 +20,8 @@ struct LoadedModels {
     let decoderStep: MLModel
     /// Loading is when Core ML prepares a model for this device's chips: seconds the first time, then it's cached.
     let loadDurationByName: [ModelName: Duration]
+    /// The release all five carry, or nil if they carry none or several (possible only with checksModelVersions false).
+    let releaseVersion: String?
 
     /// compiledModelsDirectory holds <name>.mlmodelc for all five models, as Xcode puts them in an app bundle. The
     /// transcriber checks they're all there first (ModelsDirectory), so a missing one gets an error that says why.
@@ -50,7 +52,9 @@ struct LoadedModels {
         ]
         // The release first: a model from another release says so more plainly through its version than through a
         // list of mismatched features.
-        let release = ModelRelease.assess(modelByName.map { (name: $0.name, version: ModelRelease.version(of: $0.model)) })
+        let versions = modelByName.map { ModelRelease.version(of: $0.model) }
+        releaseVersion = Set(versions).count == 1 ? versions[0] : nil
+        let release = ModelRelease.assess(zip(modelByName, versions).map { (name: $0.0.name, version: $0.1) })
         if !checksModelVersions {
             let warning = "The model version check is off (checksModelVersions: false). \(release.summary) Models "
                 + "from a release this package doesn't list can transcribe wrongly without any error."

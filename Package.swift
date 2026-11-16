@@ -9,7 +9,11 @@ let package = Package(
         .library(name: "MoonshineCoreML", targets: ["MoonshineCoreML"]),
     ],
     targets: [
-        .target(name: "MoonshineCoreML"),
+        .target(
+            name: "MoonshineCoreML",
+            // The on-device check's test recording (Transcriber.checkOnThisDevice), 10 s, 312 KB.
+            resources: [.copy("Resources/beckett.wav")]
+        ),
         .testTarget(
             name: "MoonshineCoreMLTests",
             dependencies: ["MoonshineCoreML"],

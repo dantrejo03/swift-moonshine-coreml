@@ -21,6 +21,13 @@ struct DownloadedModelsTests {
         _ = try await Moonshine.Transcriber(modelsDirectory: Self.compiledModelsDirectory.value)
     }
 
+    @Test func onDeviceCheckPassesOnThisMac() async throws {
+        let transcriber = try await Moonshine.Transcriber(modelsDirectory: Self.compiledModelsDirectory.value)
+        let result = try await transcriber.checkOnThisDevice()
+        #expect(result.modelVersion == transcriber.modelVersion)
+        #expect(result.recordingDuration > .seconds(9) && result.tentativeUpdateCount > 0)
+    }
+
     @Test func tokenizerGivesTheReferenceTextForEveryToken() throws {
         let reference = try ReferenceTranscripts.load()
         let tokenizer = try Self.loadDownloadedTokenizer()

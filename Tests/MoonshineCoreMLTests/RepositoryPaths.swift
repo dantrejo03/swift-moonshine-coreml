@@ -9,4 +9,12 @@ enum RepositoryPaths {
     static let downloadedModels = root.appending(path: "Models")
     static let fixtures = root.appending(path: "Tests/MoonshineCoreMLTests/Fixtures")
     static let referenceTranscripts = fixtures.appending(path: "reference_transcripts.json")
+    /// The library's resources: beckett.wav lives there, since the on-device check ships it.
+    static let libraryResources = root.appending(path: "Sources/MoonshineCoreML/Resources")
+
+    /// A recording named in reference_transcripts.json: a fixture, or the library's own recording.
+    static func recording(named fileName: String) -> URL {
+        let fixture = fixtures.appending(path: fileName)
+        return FileManager.default.fileExists(atPath: fixture.path) ? fixture : libraryResources.appending(path: fileName)
+    }
 }

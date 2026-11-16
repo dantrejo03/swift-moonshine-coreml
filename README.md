@@ -97,6 +97,22 @@ reused for as many as you like.
   partway through.
 - **Each update** (`Moonshine.TranscriptUpdate`) has its `text`, `tokenIDs`, `heardSeconds` and `decodeDuration`.
 
+## Checking the device
+
+Core ML can compute wrong numbers on a particular device without any error: on an Apple Watch Series 9, the
+Neural Engine turned a test recording into nothing until the frontend moved to the CPU. The checks at load can't see
+that; only running the models can. So before trusting transcripts on a device, run the package's check once:
+
+```swift
+let result = try await transcriber.checkOnThisDevice()  // throws, naming the first wrong token, if it fails
+print("models \(result.modelVersion): \(result.realTimeFactor)x real time")
+```
+
+It transcribes a 10 s recording that ships with the package (312 KB) and compares the final tokens with the
+reference ones for the loaded model release. It takes a few seconds on a watch. Remember a pass for the
+device model, OS version and model release (`transcriber.modelVersion`), and run it again when any of them changes:
+an OS update can change how Core ML runs a model.
+
 ## Checking your models
 
 The tests in this repo check the downloaded models end to end. From a clone, with the models in `Models/`:
@@ -117,6 +133,7 @@ Each package version works with particular model releases, and its `scripts/down
 | Package | Model release |
 |---|---|
 | 0.1.0 | v1.1 |
+| 0.2.0 | v1.1 |
 
 ## Performance
 

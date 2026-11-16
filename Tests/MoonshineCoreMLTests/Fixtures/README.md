@@ -4,7 +4,7 @@ Reference data for checking the package against real models end to end. About 2 
 
 | File | What it is |
 |---|---|
-| `beckett.wav` | 10 s of speech, 16 kHz mono 16-bit. One utterance. |
+| `beckett.wav` | 10 s of speech, 16 kHz mono 16-bit. One utterance. It's in `Sources/MoonshineCoreML/Resources/`, not here: the on-device check ships it. |
 | `two_cities_16k.wav` | 44 s of speech, 16 kHz mono 16-bit, the opening of *A Tale of Two Cities*. Four utterances. |
 | `reference_transcripts.json` | What the models must produce for those recordings, and each token's text on its own. |
 
